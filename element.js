@@ -35,22 +35,22 @@ class Element
 
     get left()
     {
-        return this.position.x - this.size.width / 2;
+        return this.position.x;
     }
 
     get right()
     {
-        return this.position.x + this.size.width / 2;
+        return this.position.x + this.size.width;
     }
     
     get top()
     {
-        return this.position.y + this.size.height / 2;
+        return this.position.y + this.size.height;
     }
 
     get bottom()
     {
-        return this.position.y - this.size.height / 2;
+        return this.position.y;
     }
 }
 

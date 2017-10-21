@@ -40,9 +40,9 @@ let drawBall = function(pong) {
 }
 
 let initBall = function() {
-    const ball = new Ball(20,20, 10, 10);
-    ball.velocity.velx = 100;
-    ball.velocity.vely = 100;
+    const ball = new Ball(0,0, 10, 10);
+    ball.velocity.velx = 200;
+    ball.velocity.vely = 200;
 
     return ball;
 }
