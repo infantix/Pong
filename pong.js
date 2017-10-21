@@ -1,58 +1,50 @@
-const canvas = document.getElementById('pong');
-const context = canvas.getContext('2d');
-
-const ball = new Ball(150,50, 10, 10);
-
-function update(deltaTime)
+class Pong
 {
-    ball.position.x += ball.velocity.velx * deltaTime;
-    ball.position.y += ball.velocity.vely * deltaTime;
-
-    ball.velocity.velx++;
-    ball.velocity.vely++;
-
-    draw();
-}
-
-function resetCanvas() {
-    context.fillStyle = '#000';
-    context.fillRect(0,0, canvas.width, canvas.height);
-}
-
-function drawBall() {
-    context.fillStyle = '#fff';
-    context.fillRect(ball.position.x, ball.position.y, ball.size.width, ball.size.height);
-}
-
-function draw() {
-    resetCanvas();
-    drawBall();
-}
-
-function gameLoop()
-{
-    let lastTime = 0;
-    let accumulator = 0;
-    let step = 1/60;
-    
-    function loop(millis)
+    constructor(canvas)
     {
-        if(lastTime) {
-            accumulator += (millis - lastTime) / 1000;
-    
-            while(accumulator > step) {
-                update(step);
-                accumulator -= step;
-            }
-            draw();
-        }
-        lastTime = millis;
-        requestAnimationFrame(loop);
+        this.canvas = canvas;
+        this.context = canvas.getContext('2d');
+        this.ball = initBall();
     }
 
-    loop();
+    update(deltaTime)
+    {
+        this.ball.position.x += this.ball.velocity.velx * deltaTime;
+        this.ball.position.y += this.ball.velocity.vely * deltaTime;
+    
+        if(this.ball.left <= 0 || this.ball.right >= this.canvas.width) {
+            this.ball.velocity.velx = this.ball.velocity.velx * -1;
+        }
+    
+        if(this.ball.bottom <= 0 || this.ball.top >= this.canvas.height) {
+            this.ball.velocity.vely = this.ball.velocity.vely * -1;
+        }
+    }
+
+    draw()
+    {
+        resetCanvas(this);
+        drawBall(this);
+    }
 }
 
-gameLoop();
+let resetCanvas = function(pong) {
+    pong.context.fillStyle = '#000';
+    pong.context.fillRect(0,0, pong.canvas.width, pong.canvas.height);
+}
+
+let drawBall = function(pong) {
+    pong.context.fillStyle = '#fff';
+    pong.context.fillRect(pong.ball.position.x, pong.ball.position.y, 
+        pong.ball.size.width, pong.ball.size.height);
+}
+
+let initBall = function() {
+    const ball = new Ball(20,20, 10, 10);
+    ball.velocity.velx = 100;
+    ball.velocity.vely = 100;
+
+    return ball;
+}
 
 

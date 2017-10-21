@@ -32,6 +32,26 @@ class Element
         this.position = new Position(posX, posY);
         this.size = new Size(width, height);
     }
+
+    get left()
+    {
+        return this.position.x - this.size.width / 2;
+    }
+
+    get right()
+    {
+        return this.position.x + this.size.width / 2;
+    }
+    
+    get top()
+    {
+        return this.position.y + this.size.height / 2;
+    }
+
+    get bottom()
+    {
+        return this.position.y - this.size.height / 2;
+    }
 }
 
 class Ball extends Element
