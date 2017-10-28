@@ -2,7 +2,8 @@ const canvas = document.getElementById('pong');
 const pong = new Pong(canvas);
 
 canvas.addEventListener('mousemove', event => {
-    pong.players[0].bar.position.y = event.offsetY;
+    const player0 = pong.players[0];
+    player0.setBarPositionY(event.offsetY, canvas);
 });
 
 

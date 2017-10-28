@@ -6,7 +6,6 @@ class Pong
         this.context = canvas.getContext('2d');
         this.ball = initBall();
         this.players = [
-
             //20 = margin from canvas.
             //75 = BAR HEIGHT/2.
             //45 = 20 + BAR WIDTH.
@@ -28,16 +27,8 @@ class Pong
             this.ball.velocity.vely = this.ball.velocity.vely * -1;
         }
 
-        const player1Bar = this.players[1].bar;
-        player1Bar.position.y = this.ball.position.y - player1Bar.height / 2;
-
-        if(player1Bar.bottom < 0) {
-            player1Bar.position.y = 0;
-        }
-
-        if(player1Bar.top > this.canvas.height) {
-            player1Bar.position.y = this.canvas.height - player1Bar.height;
-        }
+        const player1 = this.players[1];
+        player1.setBarPositionY(this.ball.position.y, this.canvas);
 
         this.draw();
     }

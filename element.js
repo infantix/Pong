@@ -52,6 +52,11 @@ class Element
     {
         return this.position.y;
     }
+    
+    set center(value)
+    {
+        this.position.y = value - this.size.height / 2;
+    }
 
     get width()
     {
