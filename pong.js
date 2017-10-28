@@ -45,9 +45,11 @@ class Pong
     startGame()
     {
         const velocity = this.ball.velocity;
-        if(velocity.velx === 0 && velocity.vely === 0) {
-            velocity.velx = 300;
-            velocity.vely = 300;
+        
+        if(velocity.vector == 0) {
+            const initVelocity = 200;
+            velocity.velx = initVelocity * (Math.random() > 0.5 ? 1 : -1);
+            velocity.vely = initVelocity * (Math.random() > 0.5 ? 1 : -1);
         }
     }
 
@@ -55,8 +57,7 @@ class Pong
     {
         this.ball.position.x = this.canvas.width / 2;
         this.ball.position.y = this.canvas.height / 2;
-        this.ball.velocity.velx = 0;
-        this.ball.velocity.vely = 0;
+        this.ball.velocity.vector = 0
     }
 
     draw()

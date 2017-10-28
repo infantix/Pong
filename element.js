@@ -14,6 +14,18 @@ class Velocity
         this.velx = velx;
         this.vely = vely;
     }
+
+    get vector()
+    {
+        return Math.sqrt(this.velx * this.velx + this.vely * this.vely);
+    }
+    
+    set vector(value)
+    {
+        const factor = value / (this.vector || 1);
+        this.velx *= factor;
+        this.vely *= factor;
+    }
 }
 
 class Size
