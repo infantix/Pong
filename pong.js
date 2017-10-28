@@ -24,7 +24,7 @@ class Pong
 
         updateBallPosition(ball, deltaTime);
         
-        moveBotPlayer(players[1], ball, canvas);
+        moveCpuPlayer(players[1], ball, canvas);
 
         if(collideVerticalLimit(canvas, ball)) {
             ball.velocity.vely *= -1;
@@ -36,7 +36,7 @@ class Pong
         }
 
         if(collideBar(players, ball)) {
-            ball.velocity.velx *= -1;
+            increaseBallSpeed(ball);
         }
 
         this.draw();
@@ -47,7 +47,7 @@ class Pong
         const velocity = this.ball.velocity;
         
         if(velocity.vector == 0) {
-            const initVelocity = 200;
+            const initVelocity = 300;
             velocity.velx = initVelocity * (Math.random() > 0.5 ? 1 : -1);
             velocity.vely = initVelocity * (Math.random() > 0.5 ? 1 : -1);
         }
@@ -74,6 +74,13 @@ class Pong
     }
 }
 
+let increaseBallSpeed = function (ball) {
+    const oldVector = ball.velocity.vector;
+    ball.velocity.velx *= -1;
+    ball.velocity.vely += 150 * (Math.random() - 0.5);
+    ball.velocity.vector = oldVector * 1.05;
+}
+
 let collideVerticalLimit = function (canvas, ball) {
     return ball.bottom <= 0 || ball.top >= canvas.height;
 }
@@ -90,7 +97,7 @@ let collideBar = function (players, ball) {
         && ball.bottom >= bar.bottom && ball.top <= bar.top;
 }
 
-let moveBotPlayer = function (player, ball, canvas) {
+let moveCpuPlayer = function (player, ball, canvas) {
     player.setBarPositionY(ball.position.y, canvas);
 }
 
