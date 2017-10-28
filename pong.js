@@ -4,7 +4,7 @@ class Pong
     {
         this.canvas = canvas;
         this.context = canvas.getContext('2d');
-        this.ball = initBall();
+        this.ball = initBall(canvas);
         this.players = [
             //20 = margin from canvas.
             //75 = BAR HEIGHT/2.
@@ -16,21 +16,47 @@ class Pong
 
     update(deltaTime)
     {
-        this.ball.position.x += this.ball.velocity.velx * deltaTime;
-        this.ball.position.y += this.ball.velocity.vely * deltaTime;
-    
-        if(this.ball.left <= 0 || this.ball.right >= this.canvas.width) {
-            this.ball.velocity.velx = this.ball.velocity.velx * -1;
-        }
-    
-        if(this.ball.bottom <= 0 || this.ball.top >= this.canvas.height) {
-            this.ball.velocity.vely = this.ball.velocity.vely * -1;
-        }
-
+        const ball = this.ball;
+        const player0 = this.players[0];
         const player1 = this.players[1];
-        player1.setBarPositionY(this.ball.position.y, this.canvas);
+
+        ball.position.x += ball.velocity.velx * deltaTime;
+        ball.position.y += ball.velocity.vely * deltaTime;
+        
+        if(ball.left <= 0 || ball.right >= this.canvas.width) {
+            ball.velocity.velx *= -1;
+
+            if(ball.left <= 0) {
+                player1.score++;
+                console.log("player1: " + player1.score);
+            }
+            
+            if(ball.right >= this.canvas.width) {
+                player0.score++;
+                console.log("player0: " + player0.score);
+            }
+
+        }
+        
+        if(ball.bottom <= 0 || ball.top >= this.canvas.height) {
+            ball.velocity.vely *= -1;
+        }
+        
+        player1.setBarPositionY(ball.position.y, this.canvas);
+
+        let player = ball.velocity.velx > 0 ? player1 : player0;
+
+        if(this.collide(player.bar, this.ball)) {
+            ball.velocity.velx *= -1;
+        }
 
         this.draw();
+    }
+
+    collide(bar, ball)
+    {
+        return ball.left <= bar.right && ball.right >= bar.left
+            && ball.bottom >= bar.bottom && ball.top <= bar.top;
     }
 
     draw()
@@ -57,8 +83,8 @@ let drawElement = function(context, element) {
     context.fillRect(element.left, element.bottom, element.width, element.height);
 }
 
-let initBall = function() {
-    const ball = new Ball(0, 0, 10, 10);
+let initBall = function(canvas) {
+    const ball = new Ball(canvas.width / 2, canvas.height / 2, 10, 10);
     ball.velocity.velx = 400;
     ball.velocity.vely = 400;
 
