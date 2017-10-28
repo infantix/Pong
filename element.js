@@ -52,6 +52,16 @@ class Element
     {
         return this.position.y;
     }
+
+    get width()
+    {
+        return this.size.width;
+    }
+
+    get height()
+    {
+        return this.size.height;
+    }
 }
 
 class Ball extends Element

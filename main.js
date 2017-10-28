@@ -1,6 +1,10 @@
 const canvas = document.getElementById('pong');
 const pong = new Pong(canvas);
 
+canvas.addEventListener('mousemove', event => {
+    pong.players[0].bar.position.y = event.offsetY;
+});
+
 
 function gameLoop()
 {
@@ -16,7 +20,6 @@ function gameLoop()
                 pong.update(step);
                 accumulator -= step;
             }
-            pong.draw();
         }
         lastTime = millis;
         requestAnimationFrame(loop);

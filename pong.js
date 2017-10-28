@@ -5,6 +5,14 @@ class Pong
         this.canvas = canvas;
         this.context = canvas.getContext('2d');
         this.ball = initBall();
+        this.players = [
+
+            //20 = margin from canvas.
+            //75 = BAR HEIGHT/2.
+            //45 = 20 + BAR WIDTH.
+            new Player(20, canvas.height / 2 - 75), 
+            new Player(canvas.width - 45 , canvas.height / 2 - 75),
+        ];
     }
 
     update(deltaTime)
@@ -19,30 +27,49 @@ class Pong
         if(this.ball.bottom <= 0 || this.ball.top >= this.canvas.height) {
             this.ball.velocity.vely = this.ball.velocity.vely * -1;
         }
+
+        const player1Bar = this.players[1].bar;
+        player1Bar.position.y = this.ball.position.y - player1Bar.height / 2;
+
+        if(player1Bar.bottom < 0) {
+            player1Bar.position.y = 0;
+        }
+
+        if(player1Bar.top > this.canvas.height) {
+            player1Bar.position.y = this.canvas.height - player1Bar.height;
+        }
+
+        this.draw();
     }
 
     draw()
     {
-        resetCanvas(this);
-        drawBall(this);
+        resetCanvas(this.context, this.canvas);
+        
+        //draw ball
+        drawElement(this.context, this.ball);
+        
+        //draw players' bars
+        this.players.forEach(player => {
+            drawElement(this.context, player.bar);
+        });
     }
 }
 
-let resetCanvas = function(pong) {
-    pong.context.fillStyle = '#000';
-    pong.context.fillRect(0,0, pong.canvas.width, pong.canvas.height);
+let resetCanvas = function(context, canvas) {
+    context.fillStyle = '#000';
+    context.fillRect(0,0, canvas.width, canvas.height);
 }
 
-let drawBall = function(pong) {
-    pong.context.fillStyle = '#fff';
-    pong.context.fillRect(pong.ball.position.x, pong.ball.position.y, 
-        pong.ball.size.width, pong.ball.size.height);
+let drawElement = function(context, element) {
+    context.fillStyle = '#fff';
+    context.fillRect(element.left, element.bottom, element.width, element.height);
 }
 
 let initBall = function() {
-    const ball = new Ball(0,0, 10, 10);
-    ball.velocity.velx = 200;
-    ball.velocity.vely = 200;
+    const ball = new Ball(0, 0, 10, 10);
+    ball.velocity.velx = 400;
+    ball.velocity.vely = 400;
 
     return ball;
 }
