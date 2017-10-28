@@ -42,12 +42,21 @@ class Pong
         this.draw();
     }
 
+    startGame()
+    {
+        const velocity = this.ball.velocity;
+        if(velocity.velx === 0 && velocity.vely === 0) {
+            velocity.velx = 300;
+            velocity.vely = 300;
+        }
+    }
+
     resetBall()
     {
         this.ball.position.x = this.canvas.width / 2;
         this.ball.position.y = this.canvas.height / 2;
-        this.ball.velocity.velx = 400;
-        this.ball.velocity.vely = 400;
+        this.ball.velocity.velx = 0;
+        this.ball.velocity.vely = 0;
     }
 
     draw()

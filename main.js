@@ -6,6 +6,10 @@ canvas.addEventListener('mousemove', event => {
     player0.setBarPositionY(event.offsetY, canvas);
 });
 
+canvas.addEventListener('click', event => {
+    pong.startGame();
+});
+
 
 function gameLoop()
 {
