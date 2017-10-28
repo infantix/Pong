@@ -4,7 +4,7 @@ class Pong
     {
         this.canvas = canvas;
         this.context = canvas.getContext('2d');
-        this.ball = initBall(canvas);
+        this.ball = new Ball(0, 0, 10, 10);
         this.players = [
             //20 = margin from canvas.
             //75 = BAR HEIGHT/2.
@@ -12,51 +12,42 @@ class Pong
             new Player(20, canvas.height / 2 - 75), 
             new Player(canvas.width - 45 , canvas.height / 2 - 75),
         ];
+
+        this.resetBall();
     }
 
     update(deltaTime)
     {
         const ball = this.ball;
-        const player0 = this.players[0];
-        const player1 = this.players[1];
+        const canvas = this.canvas;
+        const players = this.players;
 
-        ball.position.x += ball.velocity.velx * deltaTime;
-        ball.position.y += ball.velocity.vely * deltaTime;
+        updateBallPosition(ball, deltaTime);
         
-        if(ball.left <= 0 || ball.right >= this.canvas.width) {
-            ball.velocity.velx *= -1;
+        moveBotPlayer(players[1], ball, canvas);
 
-            if(ball.left <= 0) {
-                player1.score++;
-                console.log("player1: " + player1.score);
-            }
-            
-            if(ball.right >= this.canvas.width) {
-                player0.score++;
-                console.log("player0: " + player0.score);
-            }
-
-        }
-        
-        if(ball.bottom <= 0 || ball.top >= this.canvas.height) {
+        if(collideVerticalLimit(canvas, ball)) {
             ball.velocity.vely *= -1;
         }
         
-        player1.setBarPositionY(ball.position.y, this.canvas);
+        if(collideHorizontalLimit(canvas, ball)) {
+            updateScore(ball, players, canvas);
+            this.resetBall();
+        }
 
-        let player = ball.velocity.velx > 0 ? player1 : player0;
-
-        if(this.collide(player.bar, this.ball)) {
+        if(collideBar(players, ball)) {
             ball.velocity.velx *= -1;
         }
 
         this.draw();
     }
 
-    collide(bar, ball)
+    resetBall()
     {
-        return ball.left <= bar.right && ball.right >= bar.left
-            && ball.bottom >= bar.bottom && ball.top <= bar.top;
+        this.ball.position.x = this.canvas.width / 2;
+        this.ball.position.y = this.canvas.height / 2;
+        this.ball.velocity.velx = 400;
+        this.ball.velocity.vely = 400;
     }
 
     draw()
@@ -73,22 +64,48 @@ class Pong
     }
 }
 
-let resetCanvas = function(context, canvas) {
+let collideVerticalLimit = function (canvas, ball) {
+    return ball.bottom <= 0 || ball.top >= canvas.height;
+}
+
+let collideHorizontalLimit = function (canvas, ball) {
+    return ball.left <= 0 || ball.right >= canvas.width;
+}
+
+let collideBar = function (players, ball) {
+    const player = ball.velocity.velx > 0 ? players[1] : players[0];
+    const bar = player.bar;
+
+    return ball.left <= bar.right && ball.right >= bar.left
+        && ball.bottom >= bar.bottom && ball.top <= bar.top;
+}
+
+let moveBotPlayer = function (player, ball, canvas) {
+    player.setBarPositionY(ball.position.y, canvas);
+}
+
+let updateScore = function (ball, players, canvas) {
+    if(ball.left <= 0) {
+        players[1].score++;
+    }
+    
+    if(ball.right >= canvas.width) {
+        players[0].score++;
+    }
+}
+
+let updateBallPosition = function (ball, deltaTime) {
+    ball.position.x += ball.velocity.velx * deltaTime;
+    ball.position.y += ball.velocity.vely * deltaTime;
+}
+
+let resetCanvas = function (context, canvas) {
     context.fillStyle = '#000';
     context.fillRect(0,0, canvas.width, canvas.height);
 }
 
-let drawElement = function(context, element) {
+let drawElement = function (context, element) {
     context.fillStyle = '#fff';
     context.fillRect(element.left, element.bottom, element.width, element.height);
 }
-
-let initBall = function(canvas) {
-    const ball = new Ball(canvas.width / 2, canvas.height / 2, 10, 10);
-    ball.velocity.velx = 400;
-    ball.velocity.vely = 400;
-
-    return ball;
-}
-
 
