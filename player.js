@@ -2,7 +2,7 @@ class Player
 {
     constructor(barPosX, barPosY)
     {
-        this.bar = new Element(barPosX, barPosY, 25, 150);
+        this.bar = new Element(barPosX, barPosY, Player.barWidth, Player.barHeight);
         this.score = 0;
     }
 
@@ -19,3 +19,7 @@ class Player
         }
     }
 }
+
+Player.barHeight = 150;
+Player.barWidth = 25;
+

@@ -5,12 +5,14 @@ class Pong
         this.canvas = canvas;
         this.context = canvas.getContext('2d');
         this.ball = new Ball(0, 0, 10, 10);
+        
+        const marginFromLeft = 20;
+        const marginFromRight = canvas.width - (marginFromLeft + Player.barWidth);
+        const barPositionY = (canvas.height / 2) - (Player.barHeight / 2);
+        
         this.players = [
-            //20 = margin from canvas.
-            //75 = BAR HEIGHT/2.
-            //45 = 20 + BAR WIDTH.
-            new Player(20, canvas.height / 2 - 75), 
-            new Player(canvas.width - 45 , canvas.height / 2 - 75),
+            new Player(marginFromLeft, barPositionY), 
+            new Player(marginFromRight, barPositionY),
         ];
 
         this.resetBall();
