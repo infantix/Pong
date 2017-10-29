@@ -1,8 +1,9 @@
 class Pong
 {
-    constructor(canvas)
+    constructor(canvas, score)
     {
         this.canvas = canvas;
+        this.score = score;
         this.context = canvas.getContext('2d');
         this.ball = new Ball(0, 0, 10, 10);
         
@@ -40,6 +41,8 @@ class Pong
         if(collideBar(players, ball)) {
             increaseBallSpeed(ball);
         }
+
+        refreshScore(score, players);
 
         this.draw();
     }
@@ -126,5 +129,10 @@ let resetCanvas = function (context, canvas) {
 let drawElement = function (context, element) {
     context.fillStyle = '#fff';
     context.fillRect(element.left, element.bottom, element.width, element.height);
+}
+
+let refreshScore = function (score, players) {
+    let text = players[0].score + " - " + players[1].score;
+	score.innerText = text;
 }
 

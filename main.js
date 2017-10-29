@@ -1,12 +1,14 @@
 const canvas = document.getElementById('pong');
-const pong = new Pong(canvas);
+const score = document.getElementById('score');
 
-canvas.addEventListener('mousemove', event => {
+const pong = new Pong(canvas, score);
+
+document.addEventListener('mousemove', event => {
     const player0 = pong.players[0];
     player0.setBarPositionY(event.offsetY, canvas);
 });
 
-canvas.addEventListener('click', event => {
+document.addEventListener('click', event => {
     pong.startGame();
 });
 
